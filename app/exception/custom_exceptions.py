@@ -17,3 +17,18 @@ class NotFoundException(AppException):
             status_code=404,
             error_code='NOT_FOUND'
         )
+
+class InvalidCredentialsException(AppException):
+    def __init__(self, message:str ='Resource Not Found'):
+        super().__init__(
+            message=message,
+            status_code=400,
+            error_code='Invalid Credentials'
+        )
+class UnauthorizedException(AppException):
+    def __init__(self, message: str = "Unauthorized"):
+        super().__init__(
+            message=message,
+            status_code=401,
+            error_code="UNAUTHORIZED"
+        )

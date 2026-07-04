@@ -4,7 +4,7 @@ from app.dependency import get_db
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.models.task import Task
 from app.auth.dependencies import get_current_user
-from app.services.task_service import create_task_service, delete_task_service, get_tasks_service, get_update_service, update_task_service
+from app.services.task_service import create_task_service, delete_task_service, get_task_service, get_tasks_service,  update_task_service
 router = APIRouter()
 
 @router.post('/task', response_model=TaskResponse)
@@ -44,7 +44,7 @@ def get_task(
     db:Session = Depends(get_db),
     user_id:int = Depends(get_current_user)
 ):
-    return(
+    return get_task_service(
         task_id,
         db,
         user_id
