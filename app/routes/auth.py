@@ -4,13 +4,13 @@ from app.core.security import create_access_token, hash_password, refresh_access
 from app.dependency import get_db
 from app.exception.custom_exceptions import InvalidCredentialsException
 from app.models.user import User
-from app.schemas.auth import RefreshTokenRequest, UserCreated, UserLogin
+from app.schemas.auth import RefreshTokenRequest, UserCreated, UserLogin, UserResponse
 from app.services.auth_service import refresh_access_tokens_services
 
 router = APIRouter()
 
 
-@router.post('/register')
+@router.post('/register', response_model=UserResponse)
 def register(
     user: UserCreated,
     db:Session = Depends(get_db)
@@ -52,7 +52,7 @@ def login(
     )
     
     return  {
-        "acess_token": access_token,
+        "access_token": access_token,
         "refresh_token":refresh_token,
         "token_type":"bearer"
     }

@@ -1,6 +1,7 @@
 from fastapi import APIRouter,Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.dependency import get_db
+from app.models.user import User
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.models.task import Task
 from app.auth.dependencies import get_current_user
@@ -11,12 +12,12 @@ router = APIRouter()
 def create_task(
     task: TaskCreate,
     db:Session = Depends(get_db),
-    user_id:int = Depends(get_current_user)
+    cureent_user:User = Depends(get_current_user)
 ):
    return create_task_service(
-       task,
-       user_id,
-       db
+       task= task,
+       user_id=cureent_user.id,
+       db = db
    )
 
 @router.get('/tasks', response_model=list[TaskResponse])
@@ -26,15 +27,15 @@ def get_tasks(
     skip:int = 0,
     limit:int=10,
     db:Session = Depends(get_db),
-    user_id:int = Depends(get_current_user)
+    cureent_user:User = Depends(get_current_user)
 ):
     return get_tasks_service(
-        completed,
-        search,
-        skip,
-        limit,
-        db,
-        user_id
+        completed=completed,
+        search = search,
+        skip = skip,
+        limit = limit,
+        db = db,
+        user_id = cureent_user.id
     )
 
 
@@ -42,12 +43,12 @@ def get_tasks(
 def get_task(
     task_id:int,
     db:Session = Depends(get_db),
-    user_id:int = Depends(get_current_user)
+    cureent_user:User = Depends(get_current_user)
 ):
     return get_task_service(
-        task_id,
-        db,
-        user_id
+        task_id=task_id,
+        db = db,
+        user_id = cureent_user.id
     )
 
 
@@ -57,25 +58,25 @@ def update_task(
     task_id:int,
     task:TaskUpdate,
     db:Session = Depends(get_db), 
-    user_id:int = Depends(get_current_user)
+    cureent_user:User = Depends(get_current_user)
 ):
    return update_task_service(
-       task_id,
-       task,
-       db,
-       user_id
+       task_id=task_id,
+       task= task,
+       db = db,
+       user_id = cureent_user.id
    )
 
 @router.delete('/tasks/{task_id}', status_code=204)
 def delete_task(
     task_id:int,
     db:Session = Depends(get_db),
-    user_id:int = Depends(get_current_user)
+    cureent_user:User = Depends(get_current_user)
 ):
    return delete_task_service(
-      task_id,
-      db,
-      user_id
+      task_id = task_id,
+      db = db,
+      user_id = cureent_user.id
    )
     
     
