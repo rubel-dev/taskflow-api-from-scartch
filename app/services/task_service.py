@@ -2,6 +2,7 @@
 from fastapi import HTTPException
 
 from app.exception.custom_exceptions import NotFoundException
+from app.models.project import Project
 from app.models.task import Task
 from app.repository import task_repository
 
@@ -11,7 +12,15 @@ def create_task_service(
         user_id,
         db
 ): 
+    project= db.query(Project).filter(
+        Project.id == task.project_id,
+        Project.user_id == user_id
+    ).first()
+    if not project:
+        raise NotFoundException("Project Not Found")
+    
     return task_repository.create_task(task, user_id, db) 
+
 def get_tasks_service(
         completed,
         search,
