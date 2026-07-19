@@ -9,6 +9,7 @@ from app.models.task import Task
 from app.models.user import User
 from app.routes.task import router as task_router
 from app.routes.auth import router as auth_router
+from app.routes.project import router as project_router
 from app.routes import admin
 
 logging.basicConfig(level=logging.INFO)
@@ -18,6 +19,7 @@ app = FastAPI()
 
 app.include_router(task_router)
 app.include_router(auth_router)
+app.include_router(project_router)
 
 app.middleware('http')(rate_limit_middleware)
 
